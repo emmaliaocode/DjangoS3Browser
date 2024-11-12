@@ -8,14 +8,16 @@ except ImportError:
 
 from django.conf import settings
 
-if settings.AWS_ACCESS_KEY_ID == '' and settings.AWS_SECRET_ACCESS_KEY == '':
+if settings.AWS_ACCESS_KEY_ID == '' and settings.AWS_SECRET_ACCESS_KEY == '' and settings.AWS_SESSION_TOKEN == '':
     s3 = boto3.resource('s3')
     s3client = boto3.client('s3')
 else:
     s3 = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                        aws_session_token=settings.AWS_SESSION_TOKEN)
     s3client = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+                            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                            aws_session_token=settings.AWS_SESSION_TOKEN)
 
 bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
 bucket_location = s3client.get_bucket_location(Bucket=settings.AWS_STORAGE_BUCKET_NAME)
