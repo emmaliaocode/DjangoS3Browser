@@ -8,16 +8,40 @@ except ImportError:
 
 from django.conf import settings
 
-if settings.AWS_ACCESS_KEY_ID == '' and settings.AWS_SECRET_ACCESS_KEY == '' and settings.AWS_SESSION_TOKEN == '':
-    s3 = boto3.resource('s3')
-    s3client = boto3.client('s3')
-else:
-    s3 = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-                        aws_session_token=settings.AWS_SESSION_TOKEN)
-    s3client = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-                            aws_session_token=settings.AWS_SESSION_TOKEN)
+
+aws_access_key_id = settings.AWS_ACCESS_KEY_ID
+aws_secret_access_key = settings.AWS_SECRET_ACCESS_KEY
+aws_session_token = settings.AWS_SESSION_TOKEN
+
+s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id,
+                    aws_secret_access_key=aws_secret_access_key,
+                    aws_session_token=aws_session_token)
+s3client = boto3.client('s3', aws_access_key_id=aws_access_key_id,
+                        aws_secret_access_key=aws_secret_access_key,
+                        aws_session_token=aws_session_token)
+
+# aws_iam_role_arn = settings.AWS_IAM_ROLE_ARN
+
+# if aws_iam_role_arn != '':
+    
+#     sts_client = boto3.client('sts', region_name='us-east-1')
+
+#     assumed_role_object = sts_client.assume_role(
+#         RoleArn=aws_iam_role_arn,
+#         RoleSessionName='DjangoSession',
+#     )
+
+#     credentials=assumed_role_object['Credentials']
+
+#     aws_access_key_id = credentials['AccessKeyId']
+#     aws_secret_access_key = credentials['SecretAccessKey']
+#     aws_session_token = credentials['SessionToken']
+
+#     print(credentials)
+
+# s3 = boto3.resource('s3')
+# s3client = boto3.client('s3')
+
 
 bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
 bucket_location = s3client.get_bucket_location(Bucket=settings.AWS_STORAGE_BUCKET_NAME)
